@@ -1,3 +1,8 @@
 mod config;
 
-fn main() {}
+use config::Config;
+
+fn main() {
+    let conf = Config::unmarshal();
+    println!("{:?}", conf);
+}
