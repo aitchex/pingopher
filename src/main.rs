@@ -1,5 +1,6 @@
 mod config;
 mod ping;
+mod pixels;
 
 use config::Config;
 use std::{thread, time};
