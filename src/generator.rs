@@ -1,4 +1,4 @@
-use crate::pixels::MEDIUM_PIXELS;
+use crate::pixels::{LARGE_PIXELS, MEDIUM_PIXELS};
 use image::{ImageBuffer, ImageError, Rgba, RgbaImage};
 use std::{convert::TryInto, env, fs};
 
@@ -24,6 +24,36 @@ fn count_one(digits: &Vec<usize>) -> usize {
     }
 
     one_count
+}
+
+fn generate_large(digits: Vec<usize>, img: &mut RgbaImage, pixel: Rgba<u8>) {
+    let one_count = count_one(&digits);
+    let vert_margin = 8;
+    let mut horiz_margin = 4 + (2 * one_count);
+    let mut digit_width;
+
+    for digit in digits.iter() {
+        for y in 0..8 {
+            for x in 0..5 {
+                if LARGE_PIXELS[*digit][y][x] == 1 {
+                    let x_pos: u32 = (x * 2 + horiz_margin).try_into().unwrap();
+                    let y_pos: u32 = (y * 2 + vert_margin).try_into().unwrap();
+
+                    img.put_pixel(x_pos, y_pos, pixel);
+                    img.put_pixel(x_pos, y_pos + 1, pixel);
+                    img.put_pixel(x_pos + 1, y_pos, pixel);
+                    img.put_pixel(x_pos + 1, y_pos + 1, pixel);
+                }
+            }
+        }
+
+        if *digit == 1 {
+            digit_width = 6;
+        } else {
+            digit_width = 10;
+        }
+        horiz_margin += digit_width + 4;
+    }
 }
 
 fn generate_medium(digits: Vec<usize>, img: &mut RgbaImage, pixel: Rgba<u8>) {
@@ -81,7 +111,7 @@ pub fn generate_icons() {
 
         match digits.len() {
             1 => continue,
-            2 => continue,
+            2 => generate_large(digits, &mut img, pixel),
             3 => generate_medium(digits, &mut img, pixel),
             4 => continue,
             _ => println!("Not Implemented"),
