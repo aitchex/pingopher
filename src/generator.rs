@@ -1,6 +1,6 @@
 use crate::pixels::MEDIUM_PIXELS;
-use image::{ImageBuffer, Rgba, RgbaImage};
-use std::convert::TryInto;
+use image::{ImageBuffer, ImageError, Rgba, RgbaImage};
+use std::{convert::TryInto, env, fs};
 
 pub fn separate_digits(num: usize) -> Vec<usize> {
     fn separate(num: usize, digits: &mut Vec<usize>) {
@@ -56,6 +56,21 @@ fn generate_medium(digits: Vec<usize>, img: &mut RgbaImage, pixel: Rgba<u8>) {
     }
 }
 
+fn save_icon(file_name: &String, img: &RgbaImage) {
+    let mut temp_dir = env::temp_dir();
+    temp_dir.push("Pingopher");
+    temp_dir.push(&file_name);
+
+    img.save(&temp_dir).unwrap_or_else(|err| match err {
+        ImageError::IoError(_) => {
+            temp_dir.pop();
+            fs::create_dir_all(&temp_dir).unwrap();
+            save_icon(&file_name, &img);
+        }
+        _ => panic!("Saving failed: {}", err), // TODO: Return error to the user
+    });
+}
+
 pub fn generate_icons() {
     let pixel = Rgba::from([255; 4]);
 
@@ -72,6 +87,6 @@ pub fn generate_icons() {
             _ => println!("Not Implemented"),
         }
 
-        img.save("icons/".to_owned() + &file_name).unwrap();
+        save_icon(&file_name, &img);
     }
 }
