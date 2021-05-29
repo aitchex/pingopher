@@ -2,7 +2,7 @@ use crate::pixels::{LARGE_PIXELS, MEDIUM_PIXELS};
 use image::{ImageBuffer, ImageError, Rgba, RgbaImage};
 use std::{convert::TryInto, env, fs};
 
-pub fn separate_digits(num: usize) -> Vec<usize> {
+fn separate_digits(num: usize) -> Vec<usize> {
     fn separate(num: usize, digits: &mut Vec<usize>) {
         if num >= 10 {
             separate(num / 10, digits);
