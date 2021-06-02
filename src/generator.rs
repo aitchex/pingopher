@@ -56,35 +56,35 @@ fn generate_large(digits: Vec<usize>, img: &mut RgbaImage, pixel: Rgba<u8>) {
     }
 }
 
-fn generate_medium(digits: Vec<usize>, img: &mut RgbaImage, pixel: Rgba<u8>) {
-    let one_count = count_one(&digits);
-    let vert_margin = 10;
-    let mut horiz_margin = 2 + (2 * one_count);
-    let mut digit_width;
+// fn generate_medium(digits: Vec<usize>, img: &mut RgbaImage, pixel: Rgba<u8>) {
+//     let one_count = count_one(&digits);
+//     let vert_margin = 10;
+//     let mut horiz_margin = 2 + (2 * one_count);
+//     let mut digit_width;
 
-    for digit in digits.iter() {
-        for y in 0..6 {
-            for x in 0..4 {
-                if MEDIUM_PIXELS[*digit][y][x] == 1 {
-                    let x_pos: u32 = (x * 2 + horiz_margin).try_into().unwrap();
-                    let y_pos: u32 = (y * 2 + vert_margin).try_into().unwrap();
+//     for digit in digits.iter() {
+//         for y in 0..6 {
+//             for x in 0..4 {
+//                 if MEDIUM_PIXELS[*digit][y][x] == 1 {
+//                     let x_pos: u32 = (x * 2 + horiz_margin).try_into().unwrap();
+//                     let y_pos: u32 = (y * 2 + vert_margin).try_into().unwrap();
 
-                    img.put_pixel(x_pos, y_pos, pixel);
-                    img.put_pixel(x_pos, y_pos + 1, pixel);
-                    img.put_pixel(x_pos + 1, y_pos, pixel);
-                    img.put_pixel(x_pos + 1, y_pos + 1, pixel);
-                }
-            }
-        }
+//                     img.put_pixel(x_pos, y_pos, pixel);
+//                     img.put_pixel(x_pos, y_pos + 1, pixel);
+//                     img.put_pixel(x_pos + 1, y_pos, pixel);
+//                     img.put_pixel(x_pos + 1, y_pos + 1, pixel);
+//                 }
+//             }
+//         }
 
-        if *digit == 1 {
-            digit_width = 4;
-        } else {
-            digit_width = 8;
-        }
-        horiz_margin += digit_width + 2;
-    }
-}
+//         if *digit == 1 {
+//             digit_width = 4;
+//         } else {
+//             digit_width = 8;
+//         }
+//         horiz_margin += digit_width + 2;
+//     }
+// }
 
 fn save_icon(file_name: &String, img: &RgbaImage) {
     let mut temp_dir = env::temp_dir();
@@ -112,7 +112,7 @@ pub fn generate_icons() {
         match digits.len() {
             1 => continue,
             2 => generate_large(digits, &mut img, pixel),
-            3 => generate_medium(digits, &mut img, pixel),
+            // 3 => generate_medium(digits, &mut img, pixel),
             4 => continue,
             _ => println!("Not Implemented"),
         }
