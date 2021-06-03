@@ -11,7 +11,7 @@ use std::{
 pub struct Config {
     pub ip: String,
     pub delay: u64,
-    pub color: [u8; 3],
+    pub color: [u8; 4],
     pub autostart: bool,
 }
 
@@ -20,7 +20,7 @@ impl Default for Config {
         Config {
             ip: String::from("1.1.1.1"),
             delay: 1,
-            color: [255, 255, 255],
+            color: [255; 4],
             autostart: true,
         }
     }

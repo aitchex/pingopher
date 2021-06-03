@@ -1,9 +1,10 @@
 mod config;
+mod generator;
 mod ping;
 mod pixels;
 
 use config::Config;
-use std::{thread, time};
+use std::{thread, time::Duration};
 
 fn main() {
     let conf = Config::unmarshal();
@@ -12,6 +13,6 @@ fn main() {
     loop {
         let rtt = ping::get_rtt(&conf.ip);
         println!("{}", rtt);
-        thread::sleep(time::Duration::from_secs(conf.delay));
+        thread::sleep(Duration::from_secs(conf.delay));
     }
 }
