@@ -14,8 +14,8 @@ pub struct Icon {
 }
 
 impl Icon {
-    pub fn generate() {
-        let pixel = Rgba::from([255; 4]);
+    pub fn generate(color: [u8; 4]) {
+        let pixel = Rgba::from(color);
 
         for i in 0..10000 {
             let digits = Self::separate_digits(i);
