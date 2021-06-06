@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 pub const SMALL_PIXELS: [[u8; 5]; 10] = [
     SMALL_ZERO,
     SMALL_ONE,
