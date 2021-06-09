@@ -1,4 +1,5 @@
 use crate::pixels::{LARGE_PIXELS, MEDIUM_PIXELS};
+use crate::utils::NAME;
 use image::{ImageBuffer, ImageError, Rgba, RgbaImage};
 use std::{convert::TryInto, env, fs};
 
@@ -112,7 +113,7 @@ impl Icon {
 
     fn save_icon(&self, ico: &RgbaImage) {
         let mut temp_dir = env::temp_dir();
-        temp_dir.push("Pingopher");
+        temp_dir.push(NAME);
         temp_dir.push(&self.name);
 
         ico.save(&temp_dir).unwrap_or_else(|err| match err {

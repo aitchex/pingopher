@@ -2,21 +2,23 @@ mod config;
 mod generator;
 mod ping;
 mod pixels;
+mod utils;
 
 use config::Config;
 use generator::Icon;
 use std::{env, thread, time::Duration};
 use tray::{Tray, TrayIcon};
+use utils::NAME;
 
 fn main() {
     let conf = Config::unmarshal();
     println!("{:?}", conf);
 
     let mut tray = Tray::new();
-    tray.set_tooltip("Pingopher");
+    tray.set_tooltip(NAME);
 
     let mut ico_path = env::temp_dir();
-    ico_path.push("Pingopher");
+    ico_path.push(NAME);
 
     loop {
         let rtt = ping::get_rtt(&conf.ip);
