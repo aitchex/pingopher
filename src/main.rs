@@ -16,8 +16,8 @@ fn main() {
     let conf = Config::unmarshal();
     println!("{:?}", conf);
 
-    let mut tray = Tray::new();
-    tray.set_tooltip(NAME);
+    let mut tray = Tray::new().unwrap();
+    tray.set_tooltip(NAME).unwrap();
 
     let mut ico_path = env::temp_dir();
     ico_path.push(NAME);
