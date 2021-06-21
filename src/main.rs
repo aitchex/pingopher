@@ -4,6 +4,7 @@ mod config;
 mod generator;
 mod ping;
 mod pixels;
+mod startup;
 mod utils;
 
 use config::Config;
@@ -15,6 +16,10 @@ use utils::NAME;
 fn main() {
     let conf = Config::unmarshal();
     println!("{:?}", conf);
+
+    if cfg!(not(debug_assertions)) && conf.autostart {
+        startup::add_startup();
+    }
 
     let mut tray = Tray::new().unwrap();
     tray.set_tooltip(NAME).unwrap();
