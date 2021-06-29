@@ -318,3 +318,9 @@ const LETTER_X: [u8; 5] = [
 ];
 
 const UNDERSCORE: [u8; 1] = [0b_1_1_1_1];
+
+#[rustfmt::skip]
+const DOT: [u8; 2] = [
+    0b_1_1,
+    0b_1_1,
+];
