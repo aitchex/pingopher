@@ -1,3 +1,28 @@
+#[derive(Debug)]
+pub struct Point {
+    pub x: u32,
+    pub y: u32,
+}
+
+impl Point {
+    pub fn get_points<const N: usize>(font: &[u8; N], shift: u32) -> Vec<Point> {
+        let mut points = Vec::new();
+
+        for (y, f) in font.iter().enumerate() {
+            for x in (0..shift).rev() {
+                if *f & 1 << x != 0 {
+                    points.push(Point {
+                        x: shift - x - 1,
+                        y: y as u32,
+                    });
+                }
+            }
+        }
+
+        points
+    }
+}
+
 #[allow(dead_code)]
 pub const SMALL_PIXELS: [[u8; 5]; 10] = [
     SMALL_ZERO,
@@ -309,7 +334,7 @@ const LARGE_NINE: [u8; 8] = [
     0b_0_1_1_1_0,
 ];
 
-const LETTER_X: [u8; 5] = [
+pub const LETTER_X: [u8; 5] = [
     0b_1_0_0_0_1,
     0b_0_1_0_1_0,
     0b_0_0_1_0_0,
@@ -317,10 +342,10 @@ const LETTER_X: [u8; 5] = [
     0b_1_0_0_0_1,
 ];
 
-const UNDERSCORE: [u8; 1] = [0b_1_1_1_1];
+pub const UNDERSCORE: [u8; 1] = [0b_1_1_1_1];
 
 #[rustfmt::skip]
-const DOT: [u8; 2] = [
+pub const DOT: [u8; 2] = [
     0b_1_1,
     0b_1_1,
 ];
