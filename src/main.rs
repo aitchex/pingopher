@@ -8,7 +8,6 @@ mod startup;
 mod utils;
 
 use config::Config;
-use generator::Icon;
 use std::{env, thread, time::Duration};
 use tray::{Tray, TrayIcon};
 use utils::NAME;
@@ -34,7 +33,7 @@ fn main() {
         ico_path.push(rtt + ".ico");
         if let Err(err) = tray.set_icon(ico_path.to_str().unwrap()) {
             eprintln!("{}", err);
-            Icon::generate(conf.color);
+            conf.generate_icons();
         };
         ico_path.pop();
 
