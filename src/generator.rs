@@ -88,7 +88,7 @@ impl Config {
                 }
             }
 
-            icon.save_icon();
+            icon.save();
         }
     }
 
@@ -122,7 +122,7 @@ impl Config {
         icon.vertical_margin = X_VERTICAL_MARGIN;
         icon.put_pixels(&x_points, &pixel);
 
-        icon.save_icon();
+        icon.save();
     }
 }
 
@@ -163,7 +163,7 @@ impl Icon {
         }
     }
 
-    fn save_icon(&self) {
+    fn save(&self) {
         let mut temp_dir = env::temp_dir();
         temp_dir.push(NAME);
         temp_dir.push(&self.name);
@@ -172,7 +172,7 @@ impl Icon {
             ImageError::IoError(_) => {
                 temp_dir.pop();
                 fs::create_dir_all(&temp_dir).unwrap();
-                self.save_icon();
+                self.save();
             }
             _ => panic!("Saving failed: {}", err), // TODO: Return error to the user
         });
