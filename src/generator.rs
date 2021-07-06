@@ -25,20 +25,9 @@ impl Config {
         const MEDIUM_WIDTH: u32 = 4;
         const LARGE_WIDTH: u32 = 5;
 
-        let small_points: Vec<Vec<Point>> = SMALL_PIXELS
-            .iter()
-            .map(|p| Point::get_points(p, SMALL_WIDTH))
-            .collect();
-
-        let medium_points: Vec<Vec<Point>> = MEDIUM_PIXELS
-            .iter()
-            .map(|p| Point::get_points(p, MEDIUM_WIDTH))
-            .collect();
-
-        let large_points: Vec<Vec<Point>> = LARGE_PIXELS
-            .iter()
-            .map(|p| Point::get_points(p, LARGE_WIDTH))
-            .collect();
+        let small_font = Point::get_font(&SMALL_PIXELS, SMALL_WIDTH);
+        let medium_font = Point::get_font(&MEDIUM_PIXELS, MEDIUM_WIDTH);
+        let large_font = Point::get_font(&LARGE_PIXELS, LARGE_WIDTH);
 
         for i in 0..10000 {
             let digits = Icon::separate_digits(i);
@@ -53,7 +42,7 @@ impl Config {
                 1 => continue,
 
                 2 => {
-                    font = &large_points;
+                    font = &large_font;
                     normal_width = LARGE_WIDTH * 2;
                     thin_width = 6;
                     Icon {
@@ -66,7 +55,7 @@ impl Config {
                 }
 
                 3 => {
-                    font = &medium_points;
+                    font = &medium_font;
                     normal_width = MEDIUM_WIDTH * 2;
                     thin_width = 4;
                     Icon {
@@ -79,7 +68,7 @@ impl Config {
                 }
 
                 4 => {
-                    font = &small_points;
+                    font = &small_font;
                     normal_width = SMALL_WIDTH * 2;
                     thin_width = normal_width;
                     Icon {

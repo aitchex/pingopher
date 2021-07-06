@@ -21,6 +21,10 @@ impl Point {
 
         points
     }
+
+    pub fn get_font<const N: usize>(font: &[[u8; N]; 10], shift: u32) -> Vec<Vec<Point>> {
+        font.iter().map(|p| Self::get_points(p, shift)).collect()
+    }
 }
 
 pub const SMALL_PIXELS: [[u8; 5]; 10] = [
