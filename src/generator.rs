@@ -1,5 +1,5 @@
 use crate::config::Config;
-use crate::pixels::{Point, LARGE_PIXELS, LETTER_X, MEDIUM_PIXELS, UNDERSCORE};
+use crate::pixels::{Point, LARGE_PIXELS, LETTER_X, MEDIUM_PIXELS, SMALL_PIXELS, UNDERSCORE};
 use crate::utils::{NAME, TIMED_OUT_ICON};
 use image::{ImageBuffer, ImageError, Rgba, RgbaImage};
 use std::{env, fs};
@@ -21,8 +21,14 @@ impl Config {
     fn generate_digits(&self) {
         let pixel = Rgba::from(self.color);
 
+        const SMALL_WIDTH: u32 = 3;
         const MEDIUM_WIDTH: u32 = 4;
         const LARGE_WIDTH: u32 = 5;
+
+        let small_points: Vec<Vec<Point>> = SMALL_PIXELS
+            .iter()
+            .map(|p| Point::get_points(p, SMALL_WIDTH))
+            .collect();
 
         let medium_points: Vec<Vec<Point>> = MEDIUM_PIXELS
             .iter()
@@ -40,16 +46,16 @@ impl Config {
             let ico = ImageBuffer::new(32, 32);
 
             let font;
-            let thin_width;
             let normal_width;
+            let thin_width;
 
             let mut icon = match digits.len() {
                 1 => continue,
 
                 2 => {
                     font = &large_points;
-                    thin_width = 6;
                     normal_width = LARGE_WIDTH * 2;
+                    thin_width = 6;
                     Icon {
                         name,
                         ico,
@@ -61,8 +67,8 @@ impl Config {
 
                 3 => {
                     font = &medium_points;
-                    thin_width = 4;
                     normal_width = MEDIUM_WIDTH * 2;
+                    thin_width = 4;
                     Icon {
                         name,
                         ico,
@@ -72,16 +78,31 @@ impl Config {
                     }
                 }
 
-                4 => continue,
-                _ => continue,
+                4 => {
+                    font = &small_points;
+                    normal_width = SMALL_WIDTH * 2;
+                    thin_width = normal_width;
+                    Icon {
+                        name,
+                        ico,
+                        margin: 2,
+                        horizontal_margin: 0,
+                        vertical_margin: 12,
+                    }
+                }
+                _ => break,
             };
 
-            icon.horizontal_margin = icon.margin + (2 * Icon::count_one(&digits));
+            icon.horizontal_margin = if digits.len() == 4 {
+                icon.margin
+            } else {
+                icon.margin + (2 * Icon::count_one(&digits))
+            };
 
-            for digit in digits {
-                icon.put_pixels(&font[digit], &pixel);
+            for digit in &digits {
+                icon.put_pixels(&font[*digit], &pixel);
 
-                if digit == 1 {
+                if *digit == 1 {
                     icon.horizontal_margin += thin_width + icon.margin;
                 } else {
                     icon.horizontal_margin += normal_width + icon.margin;
