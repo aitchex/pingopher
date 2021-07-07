@@ -1,6 +1,6 @@
 use crate::config::Config;
-use crate::pixels::{Point, LARGE_PIXELS, LETTER_X, MEDIUM_PIXELS, SMALL_PIXELS, UNDERSCORE};
-use crate::utils::{NAME, TIMED_OUT_ICON};
+use crate::pixels::{Point, DOT, LARGE_PIXELS, LETTER_X, MEDIUM_PIXELS, SMALL_PIXELS, UNDERSCORE};
+use crate::utils::{DOTS, NAME, TIMED_OUT_ICON};
 use image::{ImageBuffer, ImageError, Rgba, RgbaImage};
 use std::{env, fs};
 
@@ -14,8 +14,65 @@ pub struct Icon {
 
 impl Config {
     pub fn generate_icons(&self) {
+        self.generate_dots();
         self.generate_timed_out();
         self.generate_digits();
+    }
+
+    fn generate_dots(&self) {
+        let pixel = Rgba::from(self.color);
+
+        const DOT_WIDTH: u32 = 2;
+
+        let dot_points = Point::get_points(&DOT, DOT_WIDTH);
+
+        let mut icon = Icon {
+            name: String::from(DOTS),
+            ico: ImageBuffer::new(32, 32),
+            margin: 6,
+            horizontal_margin: 4,
+            vertical_margin: 14,
+        };
+
+        for _ in 0..3 {
+            icon.put_pixels(&dot_points, &pixel);
+            icon.horizontal_margin += DOT_WIDTH * 2 + icon.margin;
+        }
+
+        icon.save();
+    }
+
+    fn generate_timed_out(&self) {
+        let pixel = Rgba::from(self.color);
+
+        const X_WIDTH: u32 = 5;
+        const X_VERTICAL_MARGIN: u32 = 10;
+
+        const UNDERSCORE_WIDTH: u32 = 4;
+        const UNDERSCORE_VERTICAL_MARGIN: u32 = 22;
+
+        let x_points = Point::get_points(&LETTER_X, X_WIDTH);
+        let underscore_points = Point::get_points(&UNDERSCORE, UNDERSCORE_WIDTH);
+
+        let mut icon = Icon {
+            name: String::from(TIMED_OUT_ICON),
+            ico: RgbaImage::new(32, 32),
+            margin: 2,
+            horizontal_margin: 0,
+            vertical_margin: X_VERTICAL_MARGIN,
+        };
+
+        icon.put_pixels(&x_points, &pixel);
+
+        icon.horizontal_margin += X_WIDTH * 2 + icon.margin;
+        icon.vertical_margin = UNDERSCORE_VERTICAL_MARGIN;
+        icon.put_pixels(&underscore_points, &pixel);
+
+        icon.horizontal_margin += UNDERSCORE_WIDTH * 2 + icon.margin;
+        icon.vertical_margin = X_VERTICAL_MARGIN;
+        icon.put_pixels(&x_points, &pixel);
+
+        icon.save();
     }
 
     fn generate_digits(&self) {
@@ -100,39 +157,6 @@ impl Config {
 
             icon.save();
         }
-    }
-
-    fn generate_timed_out(&self) {
-        let pixel = Rgba::from(self.color);
-
-        const X_WIDTH: u32 = 5;
-        const X_VERTICAL_MARGIN: u32 = 10;
-
-        const UNDERSCORE_WIDTH: u32 = 4;
-        const UNDERSCORE_VERTICAL_MARGIN: u32 = 22;
-
-        let x_points = Point::get_points(&LETTER_X, X_WIDTH);
-        let underscore_points = Point::get_points(&UNDERSCORE, UNDERSCORE_WIDTH);
-
-        let mut icon = Icon {
-            name: String::from(TIMED_OUT_ICON),
-            ico: RgbaImage::new(32, 32),
-            margin: 2,
-            horizontal_margin: 0,
-            vertical_margin: X_VERTICAL_MARGIN,
-        };
-
-        icon.put_pixels(&x_points, &pixel);
-
-        icon.horizontal_margin += X_WIDTH * 2 + icon.margin;
-        icon.vertical_margin = UNDERSCORE_VERTICAL_MARGIN;
-        icon.put_pixels(&underscore_points, &pixel);
-
-        icon.horizontal_margin += UNDERSCORE_WIDTH * 2 + icon.margin;
-        icon.vertical_margin = X_VERTICAL_MARGIN;
-        icon.put_pixels(&x_points, &pixel);
-
-        icon.save();
     }
 }
 
