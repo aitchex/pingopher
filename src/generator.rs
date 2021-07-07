@@ -10,6 +10,7 @@ pub struct Icon {
     margin: u32,
     horizontal_margin: u32,
     vertical_margin: u32,
+    pixel: Rgba<u8>,
 }
 
 impl Config {
@@ -20,8 +21,6 @@ impl Config {
     }
 
     fn generate_dots(&self) {
-        let pixel = Rgba::from(self.color);
-
         const DOT_WIDTH: u32 = 2;
 
         let dot_points = Point::get_points(&DOT, DOT_WIDTH);
@@ -32,10 +31,11 @@ impl Config {
             margin: 6,
             horizontal_margin: 4,
             vertical_margin: 14,
+            pixel: Rgba::from(self.color),
         };
 
         for _ in 0..3 {
-            icon.put_pixels(&dot_points, &pixel);
+            icon.put_pixels(&dot_points);
             icon.horizontal_margin += DOT_WIDTH * 2 + icon.margin;
         }
 
@@ -43,8 +43,6 @@ impl Config {
     }
 
     fn generate_timed_out(&self) {
-        let pixel = Rgba::from(self.color);
-
         const X_WIDTH: u32 = 5;
         const X_VERTICAL_MARGIN: u32 = 10;
 
@@ -60,17 +58,18 @@ impl Config {
             margin: 2,
             horizontal_margin: 0,
             vertical_margin: X_VERTICAL_MARGIN,
+            pixel: Rgba::from(self.color),
         };
 
-        icon.put_pixels(&x_points, &pixel);
+        icon.put_pixels(&x_points);
 
         icon.horizontal_margin += X_WIDTH * 2 + icon.margin;
         icon.vertical_margin = UNDERSCORE_VERTICAL_MARGIN;
-        icon.put_pixels(&underscore_points, &pixel);
+        icon.put_pixels(&underscore_points);
 
         icon.horizontal_margin += UNDERSCORE_WIDTH * 2 + icon.margin;
         icon.vertical_margin = X_VERTICAL_MARGIN;
-        icon.put_pixels(&x_points, &pixel);
+        icon.put_pixels(&x_points);
 
         icon.save();
     }
@@ -108,6 +107,7 @@ impl Config {
                         margin: 4,
                         horizontal_margin: 0,
                         vertical_margin: 8,
+                        pixel,
                     }
                 }
 
@@ -121,6 +121,7 @@ impl Config {
                         margin: 2,
                         horizontal_margin: 0,
                         vertical_margin: 10,
+                        pixel,
                     }
                 }
 
@@ -134,6 +135,7 @@ impl Config {
                         margin: 2,
                         horizontal_margin: 0,
                         vertical_margin: 12,
+                        pixel,
                     }
                 }
                 _ => break,
@@ -146,7 +148,7 @@ impl Config {
             };
 
             for digit in &digits {
-                icon.put_pixels(&font[*digit], &pixel);
+                icon.put_pixels(&font[*digit]);
 
                 if *digit == 1 {
                     icon.horizontal_margin += thin_width + icon.margin;
@@ -185,15 +187,15 @@ impl Icon {
         one_count
     }
 
-    fn put_pixels(&mut self, points: &Vec<Point>, pixel: &Rgba<u8>) {
+    fn put_pixels(&mut self, points: &Vec<Point>) {
         for p in points {
             let x = p.x * 2 + self.horizontal_margin;
             let y = p.y * 2 + self.vertical_margin;
 
-            self.ico.put_pixel(x, y, *pixel);
-            self.ico.put_pixel(x + 1, y, *pixel);
-            self.ico.put_pixel(x, y + 1, *pixel);
-            self.ico.put_pixel(x + 1, y + 1, *pixel);
+            self.ico.put_pixel(x, y, self.pixel);
+            self.ico.put_pixel(x + 1, y, self.pixel);
+            self.ico.put_pixel(x, y + 1, self.pixel);
+            self.ico.put_pixel(x + 1, y + 1, self.pixel);
         }
     }
 
