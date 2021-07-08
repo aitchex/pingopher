@@ -30,7 +30,7 @@ fn main() {
         let rtt = ping::get_rtt(&conf.ip);
         println!("RTT: {}", rtt);
 
-        ico_path.push(rtt + ".ico");
+        ico_path.push(rtt);
         if let Err(err) = tray.set_icon(ico_path.to_str().unwrap()) {
             eprintln!("{}", err);
             conf.generate_icons();
