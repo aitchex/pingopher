@@ -21,7 +21,8 @@ fn main() {
     }
 
     let mut tray = Tray::new().unwrap();
-    tray.set_tooltip(NAME).unwrap();
+    tray.set_tooltip(NAME.to_owned() + "\nPinging: " + &conf.ip)
+        .unwrap();
 
     let mut ico_path = env::temp_dir();
     ico_path.push(NAME);
